@@ -1,24 +1,38 @@
 <template>
   <div class="app">
-    <button @click="openModal">Add Event</button>
+    <v-btn color="primary" @click="openModal">
+      Add Event
+    </v-btn>
 
     <div v-if="showModal" class="modal">
       <h2>Thêm sự kiện mới</h2>
       <form @submit.prevent="saveEvent">
-        <label for="title">Title</label>
-        <input v-model="newEvent.title" type="text" id="title" required />
 
-        <label for="start">Start Date</label>
-        <input v-model="newEvent.start" type="date" id="start" required />
+        <v-text-field
+            v-model="newEvent.title"
+            label="Title"
+            required
+        ></v-text-field>
 
-        <label for="end">End Date</label>
-        <input v-model="newEvent.end" type="date" id="end" required />
+        <v-text-field
+            v-model="newEvent.start"
+            label="Start Date"
+            required
+            type="date"
+        ></v-text-field>
+
+        <v-text-field
+            v-model="newEvent.end"
+            label="End Date"
+            required
+            type="date"
+        ></v-text-field>
 
         <label for="backgroundColor">Background Color</label>
         <input v-model="newEvent.backgroundColor" type="color" id="backgroundColor" />
 
-        <button type="submit">Save</button>
-        <button type="button" @click="closeModal">Cancel</button>
+        <v-btn type="submit" block>Save</v-btn>
+        <v-btn color="error" type="button" @click="closeModal">Cancel</v-btn>
       </form>
     </div>
 
@@ -57,6 +71,7 @@ const calendarOptions = ref({
   initialView: 'dayGridMonth',
   editable: true,
   eventOverlap: true,
+  locale: 'ja',
   events: events.value
 })
 
