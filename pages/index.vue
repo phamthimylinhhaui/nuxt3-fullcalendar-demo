@@ -37,6 +37,7 @@
     </div>
 
     <FullCalendar :options="calendarOptions" />
+    <FullCalendar :options="calendarOptions2" />
   </div>
 </template>
 
@@ -44,6 +45,7 @@
 import { ref, onMounted } from 'vue'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 
 const showModal = ref(false)
@@ -67,11 +69,64 @@ const events = ref(loadEventsFromStorage())
 
 // Config FullCalendar
 const calendarOptions = ref({
-  plugins: [dayGridPlugin, interactionPlugin],
-  initialView: 'dayGridMonth',
+  plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
+  // initialView: 'dayGridMonth',
+  initialView: 'customFourWeeks',
   editable: true,
   eventOverlap: true,
   locale: 'ja',
+  allDayText: 'Time line 1',
+  dayHeaderFormat: {
+    weekday: 'short',
+    day: 'numeric',
+  },
+  // dayHeaders: false,
+  // headerToolbar: {
+  //   left: 'prev,next today',
+  //   center: 'title',
+  //   // right: 'timeGridWeek,timeGridDay,dayGridMonth,customFourWeeks'
+  // },
+  views: {
+    customFourWeeks: {
+      type: 'timeGrid',        // Sử dụng timeGrid cho chế độ xem tuần
+      duration: { days: 30 },  // Tùy chỉnh duration để hiển thị 14 ngày (2 tuần)
+      buttonText: '4 tuần',    // Tùy chỉnh tên hiển thị trên nút
+    }
+  },
+  slotLabelFormat: null,
+  slotMinTime: '00:00:00',
+  slotMaxTime: '00:00:00',
+  events: events.value
+})
+const calendarOptions2 = ref({
+  plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
+  // initialView: 'dayGridMonth',
+  initialView: 'customFourWeeks',
+  editable: true,
+  eventOverlap: true,
+  locale: 'ja',
+  allDayText: 'Time line 2',
+  dayHeaderFormat: {
+    weekday: 'short',
+    day: 'numeric',
+  },
+  dayHeaders: false,
+  // headerToolbar: false,  // Tùy chọn để ẩn hoàn toàn phần header
+  // headerToolbar: {
+  //   left: 'prev,next today',
+  //   center: 'title',
+  //   right: 'timeGridWeek,timeGridDay,dayGridMonth,customFourWeeks'
+  // },
+  views: {
+    customFourWeeks: {
+      type: 'timeGrid',        // Sử dụng timeGrid cho chế độ xem tuần
+      duration: { days: 30 },  // Tùy chỉnh duration để hiển thị 14 ngày (2 tuần)
+      buttonText: '4 tuần',    // Tùy chỉnh tên hiển thị trên nút
+    }
+  },
+  slotLabelFormat: null,
+  slotMinTime: '00:00:00',
+  slotMaxTime: '00:00:00',
   events: events.value
 })
 
@@ -121,7 +176,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style>
 .app {
   font-family: Arial, sans-serif;
   margin: 20px;
@@ -157,5 +212,35 @@ button {
 
 .modal button {
   margin-top: 10px;
+}
+
+/* CSS để ẩn phần giờ */
+.fc-timegrid-slot {
+  display: none !important; /* Ẩn khung giờ */
+}
+
+.fc-timegrid-now-indicator-container {
+  display: none !important; /* Ẩn đường chỉ báo thời gian hiện tại */
+}
+
+.fc .fc-scrollgrid-liquid {
+  height: unset !important;
+}
+
+td.fc-timegrid-divider.fc-cell-shaded {
+  display: none;
+}
+
+tr.fc-scrollgrid-section.fc-scrollgrid-section-body > td:first-child {
+  border-bottom: none;
+}
+
+.fc-view-harness.fc-view-harness-active {
+  height: auto !important;
+  min-height: 100px;
+}
+
+.fc-daygrid-event-harness.fc-daygrid-event-harness-abs {
+  top: 0 !important;
 }
 </style>
